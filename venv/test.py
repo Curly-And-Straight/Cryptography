@@ -17,5 +17,8 @@ if __name__ == '__main__':
     decrypt = decrypt.decode('utf-8')
     decrypt = decrypt.rstrip('\0')
 
-    print(decrypt)
+    print("PlainText:  ", plain_text)
+    print("Key:        ", key)
+    print("CipherText: ", encrypt)
+    print("Final res:  ", decrypt)
 
