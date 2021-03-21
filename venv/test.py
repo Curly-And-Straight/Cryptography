@@ -3,7 +3,7 @@ from AES_decryption import *
 
 
 
-key = 'ArminSobhanCrypt69'
+key = 'ArminSobhanCrypt'
 plain_text = 'This is an AES enc/dec algorithm which is implemented from zero to 100 by A.Eftekhari and S.MoradianDaghigh'
 
 if __name__ == '__main__':
