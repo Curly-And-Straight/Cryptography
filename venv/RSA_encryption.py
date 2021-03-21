@@ -8,10 +8,9 @@ import json
 
 bits = 2048
 
-print("Please enter your plaintext path...")
-path = input()
-
-with open(path, 'r') as file:
+print("Please enter your plaintext name...")
+name = input()
+with open(name, 'r') as file:
     msg = file.read()
 
 print("Keys are generating...")
@@ -38,9 +37,9 @@ message = bytes_to_long(msg.encode('utf-8'))
 
 cipher = pow(message, d, n)
 
-with open(path.split('/')[:-1] + "cipher.json", 'w') as file:
+with open('RSA_encrypted', 'w') as file:
     data = {'cipher': cipher, 'public_key': (e, n)}
     json.dump(data, file)
 
-print("The ciphertext and public key are saved to {}/cipher.json".format(path.split('/')[:-1]))
+print("The ciphertext and public key are saved to RSA_encrypted")
 
