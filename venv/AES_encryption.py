@@ -1,20 +1,21 @@
+import json
+import random
+import string
+
+from Crypto.Util.number import bytes_to_long
 from functions import *
 from sbox_table import *
 
 
 def enc(key, data):
-    # First we need to padd the data with \x00 and break it into blocks of 16
     pad = bytes(16 - len(data) % 16)
 
     if len(pad) != 16:
         data += pad
     grids = break_in_grids_of_16(data)
 
-    # Now we need to expand the key for the multiple rounds
     expanded_key = expand_key(key, 11)
 
-    # And apply the original key to the blocks before start the rounds
-    # For now on we will work with integers
     temp_grids = []
     round_key = extract_key_for_round(expanded_key, 0)
 
@@ -23,7 +24,6 @@ def enc(key, data):
 
     grids = temp_grids
 
-    # Now we can move to the main part of the algorithm
     for round in range(1, 10):
         temp_grids = []
 
@@ -38,7 +38,6 @@ def enc(key, data):
 
         grids = temp_grids
 
-    # A final round without the mix columns
     temp_grids = []
     round_key = extract_key_for_round(expanded_key, 10)
 
@@ -51,7 +50,6 @@ def enc(key, data):
 
     grids = temp_grids
 
-    # Just need to recriate the data into a single stream before returning
     int_stream = []
 
     for grid in grids:
@@ -60,3 +58,24 @@ def enc(key, data):
                 int_stream.append(grid[row][column])
 
     return bytes(int_stream)
+
+if __name__ == '__main__':
+
+    key = ''.join(random.choice(string.ascii_lowercase) for i in range(16))
+    print(key)
+    print("Please enter your plaintext name...")
+    name = input()
+    with open(name, 'r') as file:
+        plain_text = file.read()
+
+    converted_key = []
+    [converted_key.append(ele) for ele in key.encode()]
+
+    encrypt = enc(converted_key, bytes(plain_text, encoding='utf-8'))
+
+    with open('AES_encrypted', 'w') as file:
+
+        data = {'cipher': bytes_to_long(encrypt), 'key': key}
+        json.dump(data, file)
+
+    print("The ciphertext and key are saved to AES_encrypted")
