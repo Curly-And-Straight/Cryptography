@@ -1,0 +1,3 @@
+This is a RSA enc/dec algorithm which is implemented by A.Eftekhari and S.MoradianDaghigh.
+We try to encrypt a plaintext and pass the cipher and the public key to the other person.
+Finaly he can decrypt
