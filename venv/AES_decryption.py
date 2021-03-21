@@ -1,3 +1,6 @@
+import json
+
+from Crypto.Util.number import long_to_bytes
 from functions import *
 from sbox_table import *
 
@@ -9,7 +12,6 @@ def dec(key, data):
     temp_grids = []
     round_key = extract_key_for_round(expanded_key, 10)
 
-    # First we undo the final round
     temp_grids = []
 
     for grid in grids:
@@ -30,7 +32,6 @@ def dec(key, data):
             round_key = extract_key_for_round(expanded_key, round)
             add_sub_key_step = add_sub_key(grid, round_key)
 
-            # Doing the mix columns three times is equal to using the reverse matrix
             mix_column_step = mix_columns(add_sub_key_step)
             mix_column_step = mix_columns(mix_column_step)
             mix_column_step = mix_columns(mix_column_step)
@@ -43,7 +44,6 @@ def dec(key, data):
         grids = temp_grids
         temp_grids = []
 
-    # Reversing the first add sub key
     round_key = extract_key_for_round(expanded_key, 0)
 
     for grid in grids:
@@ -51,7 +51,6 @@ def dec(key, data):
 
     grids = temp_grids
 
-    # Just transform the grids back to bytes
     int_stream = []
     for grid in grids:
         for column in range(4):
@@ -59,3 +58,26 @@ def dec(key, data):
                 int_stream.append(grid[row][column])
 
     return bytes(int_stream)
+
+
+if __name__ == '__main__':
+    print("Please enter your ciphertext name...")
+    name = input()
+
+    with open(name) as file:
+        data = json.load(file)
+        cipher = long_to_bytes(data['cipher'])
+        key = data['key']
+
+
+    converted_key = []
+    [converted_key.append(ele) for ele in key.encode()]
+
+    decrypt = dec(converted_key, cipher)
+
+    decrypt = decrypt.decode('utf-8')
+    decrypt = decrypt.rstrip('\0')
+
+    with open('AES_decrypted', 'w') as file:
+        file.write(decrypt)
+    print("The plaintext saved in AES_decrypted")
