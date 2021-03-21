@@ -1,18 +1,20 @@
 from Crypto.Util.number import long_to_bytes, bytes_to_long
 import json
 
-print("Please enter your ciphertext path...")
-path = input()
+print("Please enter your ciphertext name...")
+name = input()
 
-with open(path) as file:
+with open(name) as file:
     data = json.load(file)
-    cipher = data.cipher
-    e = data.public_key[0]
-    n = data.public_key[1]
+    cipher = data['cipher']
+    e = data['public_key'][0]
+    n = data['public_key'][1]
 
 
 res = pow(cipher, e, n)
 decrypt = long_to_bytes(res).decode()
 
-with open(path.split('/')[:-1] + "plaintext.txt", 'w') as file:
+with open("RSA_decrypted", 'w') as file:
     file.write(decrypt)
+
+print('Ciphertext decrypted and saved into RSA_decrypted')
