@@ -5,6 +5,7 @@ import libnum
 import math
 import random
 import json
+import base64
 
 bits = 2048
 
@@ -13,6 +14,7 @@ name = input()
 with open(name, 'r') as file:
     msg = file.read()
 
+msg = base64.b64encode(msg.encode('utf-8'))
 print("Keys are generating...")
 
 p = Crypto.Util.number.getPrime(bits, randfunc=get_random_bytes)
@@ -33,7 +35,7 @@ while math.gcd(e, PHI) != 1:
 d = libnum.invmod(e, PHI)
 
 print("Keys generated.")
-message = bytes_to_long(msg.encode('utf-8'))
+message = bytes_to_long(msg)
 
 cipher = pow(message, d, n)
 

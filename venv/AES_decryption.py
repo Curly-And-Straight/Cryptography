@@ -3,7 +3,7 @@ import json
 from Crypto.Util.number import long_to_bytes
 from functions import *
 from sbox_table import *
-
+import base64
 
 def dec(key, data):
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     decrypt = dec(converted_key, cipher)
 
-    decrypt = decrypt.decode('utf-8')
+    decrypt = base64.b64decode(decrypt).decode('utf-8')
     decrypt = decrypt.rstrip('\0')
 
     with open('AES_decrypted', 'w') as file:

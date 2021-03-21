@@ -1,6 +1,7 @@
 import json
 import random
 import string
+import base64
 
 from Crypto.Util.number import bytes_to_long
 from functions import *
@@ -62,7 +63,6 @@ def enc(key, data):
 if __name__ == '__main__':
 
     key = ''.join(random.choice(string.ascii_lowercase) for i in range(16))
-    print(key)
     print("Please enter your plaintext name...")
     name = input()
     with open(name, 'r') as file:
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     converted_key = []
     [converted_key.append(ele) for ele in key.encode()]
 
-    encrypt = enc(converted_key, bytes(plain_text, encoding='utf-8'))
+    encrypt = enc(converted_key, base64.b64encode(plain_text.encode('utf-8')))
 
     with open('AES_encrypted', 'w') as file:
 
